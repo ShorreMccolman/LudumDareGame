@@ -34,11 +34,22 @@ public class QuadBlock : MonoBehaviour {
 	public CityBlock bottomLeftBlock;
 	public CityBlock bottomRightBlock;
 
+	public List<CityBlock> CityBlocks
+	{
+		get{
+			List<CityBlock> blocks = new List<CityBlock> ();
+			blocks.Add (topLeftBlock);
+			blocks.Add (topRightBlock);
+			blocks.Add (bottomLeftBlock);
+			blocks.Add (bottomRightBlock);
+			return blocks;
+		}
+	}
+
 	public void SetAsFiller()
 	{
 		type = BlockType.Filler;
 		topLeftBlock.AddMapPiece (type);
-
 		topRightBlock.AddMapPiece (BlockType.Filler);
 		bottomLeftBlock.AddMapPiece (BlockType.Filler);
 		bottomRightBlock.AddMapPiece (BlockType.Filler);
@@ -47,24 +58,34 @@ public class QuadBlock : MonoBehaviour {
 	public void SetAsWarehouse(int index)
 	{
 		type = BlockType.Warehouse;
-		topLeftBlock.Renderer.sprite = WarehouseSprite;
-		topLeftBlock.AddMapPiece (type);
-		topLeftBlock.AddDestination ((Goods)(index % 3),DestinationType.Pickup);
+		int rand = Random.Range (0, 4);
 
-		topRightBlock.AddMapPiece (BlockType.Filler);
-		bottomLeftBlock.AddMapPiece (BlockType.Filler);
-		bottomRightBlock.AddMapPiece (BlockType.Filler);
+		List<CityBlock> blocks = CityBlocks;
+		for(int i=0;i<4;i++) {
+			if(i == rand) {
+				blocks[i].Renderer.sprite = WarehouseSprite;
+				blocks[i].AddMapPiece (type);
+				blocks[i].AddDestination ((Goods)(index % 3),DestinationType.Pickup);
+			} else {
+				blocks [i].AddMapPiece (BlockType.Filler);
+			}
+		}
 	}
 
 	public void SetAsDestination(int index)
 	{
 		type = BlockType.Dropoff;
-		topLeftBlock.Renderer.sprite = DropoffSprite;
-		topLeftBlock.AddMapPiece (type);
-		topLeftBlock.AddDestination ((Goods)(index % 3),DestinationType.Dropoff);
+		int rand = Random.Range (0, 4);
 
-		topRightBlock.AddMapPiece (BlockType.Filler);
-		bottomLeftBlock.AddMapPiece (BlockType.Filler);
-		bottomRightBlock.AddMapPiece (BlockType.Filler);
+		List<CityBlock> blocks = CityBlocks;
+		for(int i=0;i<4;i++) {
+			if(i == rand) {
+				blocks[i].Renderer.sprite = DropoffSprite;
+				blocks[i].AddMapPiece (type);
+				blocks[i].AddDestination ((Goods)(index % 3),DestinationType.Dropoff);
+			} else {
+				blocks [i].AddMapPiece (BlockType.Filler);
+			}
+		}
 	}
 }
