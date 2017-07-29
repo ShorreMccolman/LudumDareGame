@@ -63,15 +63,19 @@ public class PlayerController : MonoBehaviour {
 			switch(value) {
 			case Direction.Right:
 				movement.directionVec = Vector2.right;
+				transform.eulerAngles = Vector3.forward;
 				break;
 			case Direction.Down:
 				movement.directionVec = Vector2.down;
+				transform.eulerAngles = Vector3.forward * -90f;
 				break;
 			case Direction.Left:
 				movement.directionVec = Vector2.left;
+				transform.eulerAngles = Vector3.forward * 180f;
 				break;
 			case Direction.Up:
 				movement.directionVec = Vector2.up;
+				transform.eulerAngles = Vector3.forward * 90f;
 				break;
 			case Direction.Stopped:
 				movement.directionVec = Vector2.zero;
@@ -101,9 +105,24 @@ public class PlayerController : MonoBehaviour {
 
 	void Update () {
 		transform.position += (Vector3)movement.directionVec * currentSpeed * Time.deltaTime;
+
+		if(Input.GetKeyDown(KeyCode.A) && CurrentDirection != Direction.Right) {
+			TargetDirection = Direction.Left;
+		} else if(Input.GetKeyDown(KeyCode.W) && CurrentDirection != Direction.Down) {
+			TargetDirection = Direction.Up;
+		} else if(Input.GetKeyDown(KeyCode.S) && CurrentDirection != Direction.Up) {
+			TargetDirection = Direction.Down;
+		} else if(Input.GetKeyDown(KeyCode.D) && CurrentDirection != Direction.Left) {
+			TargetDirection = Direction.Right;
+		}
 	}
 		
 	void StartDriving()
+	{
+		CurrentDirection = TargetDirection;
+	}
+
+	public void HitIntersection()
 	{
 		CurrentDirection = TargetDirection;
 	}
