@@ -54,7 +54,11 @@ public class PlayerController : MonoBehaviour {
 	public Intersection Intersection
 	{
 		get{ return incomingIntersection; }
-		set{ incomingIntersection = value; }
+		set{ 
+			if (value != null && value.isStopSign)
+				TargetDirection = Direction.Stopped;
+			incomingIntersection = value; 
+		}
 	}
 
 	public bool IsDriving
@@ -110,18 +114,6 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	void Update () {
-		transform.position += (Vector3)movement.directionVec * currentSpeed * Time.deltaTime;
-
-
-		if(Intersection != null)
-		{
-			if(Vector3.Distance(transform.position,Intersection.transform.position) < 0.05f ) {
-				CurrentDirection = TargetDirection;
-				transform.position = Intersection.transform.position;
-				Intersection = null;
-			}
-		}
-
 
 		if(Input.GetKeyDown(KeyCode.A) && CurrentDirection != Direction.Right) {
 			TargetDirection = Direction.Left;
@@ -132,6 +124,21 @@ public class PlayerController : MonoBehaviour {
 		} else if(Input.GetKeyDown(KeyCode.D) && CurrentDirection != Direction.Left) {
 			TargetDirection = Direction.Right;
 		}
+
+		if(Intersection != null)
+		{
+			if(Intersection.illegalDirections.Contains(TargetDirection) || TargetDirection == Direction.Stopped) {
+				return;
+			}
+
+			if(Vector3.Distance(transform.position,Intersection.transform.position) < 0.05f ) {
+				CurrentDirection = TargetDirection;
+				transform.position = Intersection.transform.position;
+				Intersection = null;
+			}
+		}
+
+		transform.position += (Vector3)movement.directionVec * currentSpeed * Time.deltaTime;
 	}
 		
 	void StartDriving()
