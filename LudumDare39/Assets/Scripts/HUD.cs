@@ -10,7 +10,7 @@ public class HUD : MonoBehaviour {
 
 	public Text turningDirectionLabel;
 	public Text currentDirectionLabel;
-
+	public GameObject mapButton;
 
 	public void UpdateCurrentDirection(Direction direction)
 	{
@@ -19,5 +19,10 @@ public class HUD : MonoBehaviour {
 	public void UpdateTargetDirection(Direction direction)
 	{
 		turningDirectionLabel.text = "Turning: " + Movement.DirectionLabel (direction);
+	}
+
+	public void OpenMap()
+	{
+		Map.Instance.OpenMap ();
 	}
 }

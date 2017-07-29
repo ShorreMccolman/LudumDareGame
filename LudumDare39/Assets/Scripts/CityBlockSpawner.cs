@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class CityBlockSpawner : MonoBehaviour {
 
+	List<QuadBlock> warehouses = new List<QuadBlock>();
+	List<QuadBlock> dropoffs = new List<QuadBlock>();
+	List<QuadBlock> filler = new List<QuadBlock>();
+
 	// Use this for initialization
 	void Start () {
 		SpawnCityBlocks ();
@@ -48,15 +52,21 @@ public class CityBlockSpawner : MonoBehaviour {
 			}
 		}
 
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 3; i++) {
 			QuadBlock block = quads [Random.Range (0, quads.Count)];
 			quads.Remove (block);
+			warehouses.Add (block);
 			block.SetAsWarehouse ();
 		}
-		for (int i = 0; i < 9; i++) {
+		for (int i = 0; i < 12; i++) {
 			QuadBlock block = quads [Random.Range (0, quads.Count)];
 			quads.Remove (block);
+			dropoffs.Add (block);
 			block.SetAsDestination ();
+		}
+		foreach(QuadBlock block in quads) {
+			filler.Add (block);
+			block.SetAsFiller ();
 		}
 	}
 }

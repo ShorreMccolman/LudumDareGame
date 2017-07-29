@@ -61,9 +61,20 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
+	bool stopped;
+	public bool Stopped
+	{
+		set {
+			if(stopped != value && HUD.Instance)
+				HUD.Instance.mapButton.SetActive (value);
+			stopped = value;
+		}
+		get{return stopped;}
+	}
+
 	public bool IsDriving
 	{
-		get{ return movement.currentDirection != Direction.Stopped; }
+		get{ return movement.currentDirection != Direction.Stopped && !stopped; }
 	}
 		
 	public Direction CurrentDirection
@@ -101,6 +112,9 @@ public class PlayerController : MonoBehaviour {
 	{
 		get{ return movement.targetDirection;}
 		set{
+			if (Map.Instance && Map.Instance.IsOpen)
+				return;
+
 			if(HUD.Instance)
 				HUD.Instance.UpdateTargetDirection (value);
 			movement.targetDirection = value;
@@ -127,12 +141,18 @@ public class PlayerController : MonoBehaviour {
 			TargetDirection = Direction.Right;
 		}
 
+
+		HUD.Instance.mapButton.SetActive (false);
+		stopped = false;
 		if(Intersection != null)
 		{
 			bool movingValid = !Intersection.illegalDirections.Contains (TargetDirection);
-			if(!movingValid || TargetDirection == Direction.Stopped) {
-				if(Intersection.illegalDirections.Contains(CurrentDirection) || TargetDirection == Direction.Stopped)
+			if (!movingValid || TargetDirection == Direction.Stopped) {
+				if (Intersection.illegalDirections.Contains (CurrentDirection) || TargetDirection == Direction.Stopped) {
+					HUD.Instance.mapButton.SetActive (true);
+					Stopped = true;
 					return;
+				}
 			}
 
 			if(movingValid && Vector3.Distance(transform.position,Intersection.transform.position) < 0.05f ) {
