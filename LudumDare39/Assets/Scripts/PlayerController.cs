@@ -11,64 +11,100 @@ public enum Direction
 	Stopped
 }
 
+public struct Movement
+{
+	public Direction currentDirection;
+	public Vector2 directionVec;
+
+	public Direction targetDirection;
+
+	public static string DirectionLabel(Direction dir)
+	{
+		string ret = "";
+		switch(dir)
+		{
+		case Direction.Right:
+			ret = "East";
+			break;
+		case Direction.Down:
+			ret = "South";
+			break;
+		case Direction.Left:
+			ret = "West";
+			break;
+		case Direction.Up:
+			ret = "North";
+			break;
+		case Direction.Stopped:
+			ret = "Stopped";
+			break;
+		}
+		return ret;
+	}
+}
+
 public class PlayerController : MonoBehaviour {
+	public static PlayerController Instance;
+	void Awake()
+	{Instance = this;}
 
 	public float currentSpeed;
+	Movement movement;
 
-	bool isDriving;
 	public bool IsDriving
 	{
-		get{ return isDriving; }
-		set{ isDriving = value;}
+		get{ return movement.currentDirection != Direction.Stopped; }
 	}
-
-	Vector2 directionVec;
-	Direction direction;
+		
 	public Direction CurrentDirection
 	{
-		get{ return direction;}
+		get{ return movement.currentDirection;}
 		set{
 			switch(value) {
 			case Direction.Right:
-				directionVec = Vector2.right;
+				movement.directionVec = Vector2.right;
 				break;
 			case Direction.Down:
-				directionVec = Vector2.down;
+				movement.directionVec = Vector2.down;
 				break;
 			case Direction.Left:
-				directionVec = Vector2.left;
+				movement.directionVec = Vector2.left;
 				break;
 			case Direction.Up:
-				directionVec = Vector2.up;
+				movement.directionVec = Vector2.up;
 				break;
 			case Direction.Stopped:
-				directionVec = Vector2.zero;
+				movement.directionVec = Vector2.zero;
 				break;
 			}
-			direction = value;
+			HUD.Instance.UpdateCurrentDirection (value);
+			movement.currentDirection = value;
+		}
+	}
+
+	public Direction TargetDirection
+	{
+		get{ return movement.targetDirection;}
+		set{
+			HUD.Instance.UpdateTargetDirection (value);
+			movement.targetDirection = value;
 		}
 	}
 
 
-
-	// Use this for initialization
 	void Start () {
-
-		IsDriving = false;
-		CurrentDirection = Direction.Right;
+		CurrentDirection = Direction.Stopped;
+		TargetDirection = Direction.Right;
 
 		Invoke ("StartDriving", 1.0f);
-
 	}
-	
-	// Update is called once per frame
+
 	void Update () {
-		if(isDriving)
-			transform.position += (Vector3)directionVec * currentSpeed * Time.deltaTime;
+		transform.position += (Vector3)movement.directionVec * currentSpeed * Time.deltaTime;
 	}
-
+		
 	void StartDriving()
 	{
-		IsDriving = true;
+		CurrentDirection = TargetDirection;
 	}
 }
