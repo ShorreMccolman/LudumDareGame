@@ -47,4 +47,9 @@ public class CityBlock : MonoBehaviour {
 			break;
 		}
 	}
+
+	public void AddDestination()
+	{
+		GameObject obj = Instantiate (Resources.Load ("Destination"), transform.position + Vector3.down* 2.5f, Quaternion.identity, transform) as GameObject;
+	}
 }

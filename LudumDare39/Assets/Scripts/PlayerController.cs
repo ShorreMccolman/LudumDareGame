@@ -61,6 +61,15 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
+	Destination incomingDestination;
+	public Destination Destination
+	{
+		get{ return incomingDestination; }
+		set{ 
+			incomingDestination = value; 
+		}
+	}
+
 	bool stopped;
 	public bool Stopped
 	{
@@ -125,12 +134,13 @@ public class PlayerController : MonoBehaviour {
 	void Start () {
 		CurrentDirection = Direction.Stopped;
 		TargetDirection = Direction.Right;
-
-		Invoke ("StartDriving", 1.0f);
 	}
 
 	void Update () {
 
+		if(CurrentDirection == Direction.Stopped && Input.GetKeyDown(KeyCode.Space)) {
+			StartDriving ();
+		}
 		if(Input.GetKeyDown(KeyCode.A) && CurrentDirection != Direction.Right) {
 			TargetDirection = Direction.Left;
 		} else if(Input.GetKeyDown(KeyCode.W) && CurrentDirection != Direction.Down) {
@@ -142,14 +152,12 @@ public class PlayerController : MonoBehaviour {
 		}
 
 
-		HUD.Instance.mapButton.SetActive (false);
 		stopped = false;
 		if(Intersection != null)
 		{
 			bool movingValid = !Intersection.illegalDirections.Contains (TargetDirection);
 			if (!movingValid || TargetDirection == Direction.Stopped) {
 				if (Intersection.illegalDirections.Contains (CurrentDirection) || TargetDirection == Direction.Stopped) {
-					HUD.Instance.mapButton.SetActive (true);
 					Stopped = true;
 					return;
 				}
@@ -162,11 +170,27 @@ public class PlayerController : MonoBehaviour {
 			}
 		}
 
+		if(Destination != null) {
+			if(TargetDirection == Direction.Up && Vector3.Distance(transform.position,Destination.transform.position) < 0.05f) {
+				TargetDirection = CurrentDirection;
+				CurrentDirection = Direction.Stopped;
+				transform.eulerAngles = Vector3.forward * 90f;
+				transform.position = Destination.parkLocation.position;
+			}
+		}
+
+		HUD.Instance.mapButton.SetActive (!IsDriving);
+
 		transform.position += (Vector3)movement.directionVec * currentSpeed * Time.deltaTime;
 	}
 		
 	void StartDriving()
 	{
 		CurrentDirection = TargetDirection;
+
+		if(Destination != null) {
+			transform.position = Destination.transform.position;
+			Destination = null;
+		}
 	}
 }

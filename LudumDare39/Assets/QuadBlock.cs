@@ -49,6 +49,7 @@ public class QuadBlock : MonoBehaviour {
 		type = BlockType.Warehouse;
 		topLeftBlock.Renderer.sprite = WarehouseSprite;
 		topLeftBlock.AddMapPiece (type);
+		topLeftBlock.AddDestination ();
 
 		topRightBlock.AddMapPiece (BlockType.Filler);
 		bottomLeftBlock.AddMapPiece (BlockType.Filler);
@@ -60,6 +61,7 @@ public class QuadBlock : MonoBehaviour {
 		type = BlockType.Dropoff;
 		topLeftBlock.Renderer.sprite = DropoffSprite;
 		topLeftBlock.AddMapPiece (type);
+		topLeftBlock.AddDestination ();
 
 		topRightBlock.AddMapPiece (BlockType.Filler);
 		bottomLeftBlock.AddMapPiece (BlockType.Filler);

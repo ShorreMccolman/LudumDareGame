@@ -10,15 +10,22 @@ public class HUD : MonoBehaviour {
 
 	public Text turningDirectionLabel;
 	public Text currentDirectionLabel;
+	public Text currentDirectionLabelBg;
 	public GameObject mapButton;
 
 	public void UpdateCurrentDirection(Direction direction)
 	{
-		currentDirectionLabel.text = "Driving: " + Movement.DirectionLabel (direction);
+		if(direction == Direction.Stopped) {
+			currentDirectionLabel.text = "Spacebar to start";
+			currentDirectionLabelBg.text = "Spacebar to start";
+		} else {
+			currentDirectionLabel.text = "Currently driving " + Movement.DirectionLabel (direction);
+			currentDirectionLabelBg.text = "Currently driving " + Movement.DirectionLabel (direction);
+		}
 	}
 	public void UpdateTargetDirection(Direction direction)
 	{
-		turningDirectionLabel.text = "Turning: " + Movement.DirectionLabel (direction);
+		//turningDirectionLabel.text = "Turning: " + Movement.DirectionLabel (direction);
 	}
 
 	public void OpenMap()
