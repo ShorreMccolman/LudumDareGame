@@ -9,13 +9,18 @@ public class QuadBlock : MonoBehaviour {
 	public Intersection bottomLeft;
 	public Intersection bottomRight;
 
-	// Use this for initialization
-	void Start () {
-		
+	public CityBlock topLeftBlock;
+	public CityBlock topRightBlock;
+	public CityBlock bottomLeftBlock;
+	public CityBlock bottomRightBlock;
+
+	public void SetAsWarehouse()
+	{
+		topLeftBlock.Renderer.sprite = Resources.Load<Sprite> ("Art/Warehouse");
 	}
-	
-	// Update is called once per frame
-	void Update () {
-		
+
+	public void SetAsDestination()
+	{
+		topLeftBlock.Renderer.sprite = Resources.Load<Sprite> ("Art/Destination");
 	}
 }
