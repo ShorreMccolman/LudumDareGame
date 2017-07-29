@@ -28,7 +28,7 @@ public class CityBlockSpawner : MonoBehaviour {
 
 			int stopSeed = Random.Range(0, 1000);
 
-			if(stopSeed % 7 == 0) {
+			if(stopSeed % 7 == 0 && i % 5 != 4) {
 				quad.topRight.isStopSign = true;
 				Instantiate (Resources.Load ("FourWay"), quad.topRight.transform.position, Quaternion.identity, obj.transform);
 			}
@@ -36,11 +36,11 @@ public class CityBlockSpawner : MonoBehaviour {
 				quad.topLeft.isStopSign = true;
 				Instantiate (Resources.Load ("FourWay"), quad.topLeft.transform.position, Quaternion.identity, obj.transform);
 			}
-			if((stopSeed - 1) % 11 == 0) {
+			if((stopSeed - 1) % 11 == 0 && i % 8 != 7) {
 				quad.bottomLeft.isStopSign = true;
 				Instantiate (Resources.Load ("FourWay"), quad.bottomLeft.transform.position, Quaternion.identity, obj.transform);
 			}
-			if((stopSeed - 1) % 7 == 0) {
+			if((stopSeed - 1) % 7 == 0 && i % 5 != 4 && i % 8 != 7) {
 				quad.bottomRight.isStopSign = true;
 				Instantiate (Resources.Load ("FourWay"), quad.bottomRight.transform.position, Quaternion.identity, obj.transform);
 			}
