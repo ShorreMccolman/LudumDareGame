@@ -91,7 +91,8 @@ public class PlayerController : MonoBehaviour {
 				movement.directionVec = Vector2.zero;
 				break;
 			}
-			HUD.Instance.UpdateCurrentDirection (value);
+			if(HUD.Instance)
+				HUD.Instance.UpdateCurrentDirection (value);
 			movement.currentDirection = value;
 		}
 	}
@@ -100,7 +101,8 @@ public class PlayerController : MonoBehaviour {
 	{
 		get{ return movement.targetDirection;}
 		set{
-			HUD.Instance.UpdateTargetDirection (value);
+			if(HUD.Instance)
+				HUD.Instance.UpdateTargetDirection (value);
 			movement.targetDirection = value;
 		}
 	}
@@ -127,11 +129,13 @@ public class PlayerController : MonoBehaviour {
 
 		if(Intersection != null)
 		{
-			if(Intersection.illegalDirections.Contains(TargetDirection) || TargetDirection == Direction.Stopped) {
-				return;
+			bool movingValid = !Intersection.illegalDirections.Contains (TargetDirection);
+			if(!movingValid || TargetDirection == Direction.Stopped) {
+				if(Intersection.illegalDirections.Contains(CurrentDirection) || TargetDirection == Direction.Stopped)
+					return;
 			}
 
-			if(Vector3.Distance(transform.position,Intersection.transform.position) < 0.05f ) {
+			if(movingValid && Vector3.Distance(transform.position,Intersection.transform.position) < 0.05f ) {
 				CurrentDirection = TargetDirection;
 				transform.position = Intersection.transform.position;
 				Intersection = null;
