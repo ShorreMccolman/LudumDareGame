@@ -8,7 +8,7 @@ public class Intersection : MonoBehaviour {
 	{
 		if(other.tag == "Player")
 		{
-			other.GetComponent<PlayerController> ().HitIntersection ();
+			other.GetComponent<PlayerController> ().Intersection = this;
 		}
 	}
 }

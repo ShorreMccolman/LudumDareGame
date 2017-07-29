@@ -50,6 +50,12 @@ public class PlayerController : MonoBehaviour {
 
 	public float currentSpeed;
 	Movement movement;
+	Intersection incomingIntersection;
+	public Intersection Intersection
+	{
+		get{ return incomingIntersection; }
+		set{ incomingIntersection = value; }
+	}
 
 	public bool IsDriving
 	{
@@ -106,6 +112,17 @@ public class PlayerController : MonoBehaviour {
 	void Update () {
 		transform.position += (Vector3)movement.directionVec * currentSpeed * Time.deltaTime;
 
+
+		if(Intersection != null)
+		{
+			if(Vector3.Distance(transform.position,Intersection.transform.position) < 0.05f ) {
+				CurrentDirection = TargetDirection;
+				transform.position = Intersection.transform.position;
+				Intersection = null;
+			}
+		}
+
+
 		if(Input.GetKeyDown(KeyCode.A) && CurrentDirection != Direction.Right) {
 			TargetDirection = Direction.Left;
 		} else if(Input.GetKeyDown(KeyCode.W) && CurrentDirection != Direction.Down) {
@@ -118,11 +135,6 @@ public class PlayerController : MonoBehaviour {
 	}
 		
 	void StartDriving()
-	{
-		CurrentDirection = TargetDirection;
-	}
-
-	public void HitIntersection()
 	{
 		CurrentDirection = TargetDirection;
 	}
