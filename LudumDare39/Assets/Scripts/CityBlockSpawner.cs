@@ -56,13 +56,13 @@ public class CityBlockSpawner : MonoBehaviour {
 			QuadBlock block = quads [Random.Range (0, quads.Count)];
 			quads.Remove (block);
 			warehouses.Add (block);
-			block.SetAsWarehouse ();
+			block.SetAsWarehouse (i);
 		}
 		for (int i = 0; i < 12; i++) {
 			QuadBlock block = quads [Random.Range (0, quads.Count)];
 			quads.Remove (block);
 			dropoffs.Add (block);
-			block.SetAsDestination ();
+			block.SetAsDestination (i);
 		}
 		foreach(QuadBlock block in quads) {
 			filler.Add (block);

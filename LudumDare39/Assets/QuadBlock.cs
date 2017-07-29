@@ -44,24 +44,24 @@ public class QuadBlock : MonoBehaviour {
 		bottomRightBlock.AddMapPiece (BlockType.Filler);
 	}
 
-	public void SetAsWarehouse()
+	public void SetAsWarehouse(int index)
 	{
 		type = BlockType.Warehouse;
 		topLeftBlock.Renderer.sprite = WarehouseSprite;
 		topLeftBlock.AddMapPiece (type);
-		topLeftBlock.AddDestination ();
+		topLeftBlock.AddDestination ((Goods)(index % 3),DestinationType.Pickup);
 
 		topRightBlock.AddMapPiece (BlockType.Filler);
 		bottomLeftBlock.AddMapPiece (BlockType.Filler);
 		bottomRightBlock.AddMapPiece (BlockType.Filler);
 	}
 
-	public void SetAsDestination()
+	public void SetAsDestination(int index)
 	{
 		type = BlockType.Dropoff;
 		topLeftBlock.Renderer.sprite = DropoffSprite;
 		topLeftBlock.AddMapPiece (type);
-		topLeftBlock.AddDestination ();
+		topLeftBlock.AddDestination ((Goods)(index % 3),DestinationType.Dropoff);
 
 		topRightBlock.AddMapPiece (BlockType.Filler);
 		bottomLeftBlock.AddMapPiece (BlockType.Filler);

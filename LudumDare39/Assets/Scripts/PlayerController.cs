@@ -48,6 +48,8 @@ public class PlayerController : MonoBehaviour {
 	void Awake()
 	{Instance = this;}
 
+	Goods[] currentGoods = new Goods[3];
+
 	public float currentSpeed;
 	Movement movement;
 	Intersection incomingIntersection;
@@ -74,8 +76,6 @@ public class PlayerController : MonoBehaviour {
 	public bool Stopped
 	{
 		set {
-			if(stopped != value && HUD.Instance)
-				HUD.Instance.mapButton.SetActive (value);
 			stopped = value;
 		}
 		get{return stopped;}
@@ -124,8 +124,6 @@ public class PlayerController : MonoBehaviour {
 			if (Map.Instance && Map.Instance.IsOpen)
 				return;
 
-			if(HUD.Instance)
-				HUD.Instance.UpdateTargetDirection (value);
 			movement.targetDirection = value;
 		}
 	}
@@ -134,6 +132,12 @@ public class PlayerController : MonoBehaviour {
 	void Start () {
 		CurrentDirection = Direction.Stopped;
 		TargetDirection = Direction.Right;
+
+		currentGoods = new Goods[3];
+		currentGoods [0] = Goods.None;
+		currentGoods [1] = Goods.None;
+		currentGoods [2] = Goods.None;
+		HUD.Instance.UpdateGoods (currentGoods);
 	}
 
 	void Update () {
@@ -159,6 +163,7 @@ public class PlayerController : MonoBehaviour {
 			if (!movingValid || TargetDirection == Direction.Stopped) {
 				if (Intersection.illegalDirections.Contains (CurrentDirection) || TargetDirection == Direction.Stopped) {
 					Stopped = true;
+					HUD.Instance.mapButton.SetActive (true);
 					return;
 				}
 			}
@@ -176,6 +181,7 @@ public class PlayerController : MonoBehaviour {
 				CurrentDirection = Direction.Stopped;
 				transform.eulerAngles = Vector3.forward * 90f;
 				transform.position = Destination.parkLocation.position;
+				HUD.Instance.ParkAtDestination (Destination);
 			}
 		}
 
@@ -186,11 +192,66 @@ public class PlayerController : MonoBehaviour {
 		
 	void StartDriving()
 	{
+		if (TargetDirection == Direction.Up || TargetDirection == Direction.Down)
+			TargetDirection = Direction.Right;
+
 		CurrentDirection = TargetDirection;
 
 		if(Destination != null) {
 			transform.position = Destination.transform.position;
+			HUD.Instance.LeaveDestination ();
 			Destination = null;
 		}
+	}
+
+	public void PickupCurrentGoods()
+	{
+		if(Destination != null) {
+			PickupGoods (Destination.goods);
+		}
+	}
+
+	public void PickupGoods(Goods good)
+	{
+		if(currentGoods[0] == Goods.None) {
+			currentGoods [0] = good;
+		} else if (currentGoods[1] == Goods.None) {
+			currentGoods [1] = good;
+		} else if (currentGoods[2] == Goods.None) {
+			currentGoods [2] = good;
+		}
+		HUD.Instance.UpdateGoods (currentGoods);
+	}
+
+	public bool DeliverGoods(Goods good)
+	{
+		if(currentGoods[2] == good) {
+			currentGoods [2] = Goods.None;
+			HUD.Instance.UpdateGoods (currentGoods);
+			return true;
+		} else if (currentGoods[1] == good) {
+			currentGoods [1] = Goods.None;
+			HUD.Instance.UpdateGoods (currentGoods);
+			return true;
+		} else if (currentGoods[0] == good) {
+			currentGoods [0] = Goods.None;
+			HUD.Instance.UpdateGoods (currentGoods);
+			return true;
+		}
+
+		return false;
+	}
+
+	public bool HasGoods(Goods good)
+	{
+		if(currentGoods[0] == good) {
+			return true;
+		} else if (currentGoods[1] == good) {
+			return true;
+		} else if (currentGoods[2] == good) {
+			return true;
+		}
+
+		return false;
 	}
 }

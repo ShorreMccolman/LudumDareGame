@@ -48,8 +48,10 @@ public class CityBlock : MonoBehaviour {
 		}
 	}
 
-	public void AddDestination()
+	public void AddDestination(Goods good, DestinationType type)
 	{
 		GameObject obj = Instantiate (Resources.Load ("Destination"), transform.position + Vector3.down* 2.5f, Quaternion.identity, transform) as GameObject;
+		Destination dest = obj.GetComponent<Destination> ();
+		dest.SetupDestination (good, type);
 	}
 }
