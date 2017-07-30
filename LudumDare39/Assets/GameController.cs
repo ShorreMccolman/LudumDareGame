@@ -9,7 +9,7 @@ public enum Difficulty
 	Hard
 }
 
-public struct Manifest
+public class Manifest
 {
 	public int woodTarget;
 	public int steelTarget;
@@ -86,6 +86,10 @@ public struct Manifest
 		case Goods.Water:
 			waterCompleted++;
 			break;
+		}
+
+		if(woodCompleted == woodTarget && steelCompleted == steelTarget && waterCompleted == waterTarget) {
+			EndgamePopup.Instance.ShowEndgame (VictoryState.Victory);
 		}
 	}
 }

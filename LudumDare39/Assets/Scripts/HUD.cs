@@ -47,6 +47,8 @@ public class HUD : MonoBehaviour {
 	public GameObject steelButton;
 	public GameObject waterButton;
 
+	Destination currentDestination;
+
 	void Start()
 	{
 		GameController.Instance.NewGame += LeaveDestination;
@@ -65,8 +67,22 @@ public class HUD : MonoBehaviour {
 		waterLabel.text = "Water deliveries: " + manifest.waterTarget;
 
 		woodCompleteLabel.text = manifest.woodCompleted.ToString ();
+		if (manifest.woodCompleted == manifest.woodTarget)
+			woodCompleteLabel.color = Color.green;
+		else
+			woodCompleteLabel.color = Color.black;
+
 		steelCompleteLabel.text = manifest.steelCompleted.ToString ();
+		if (manifest.steelCompleted == manifest.steelTarget)
+			steelCompleteLabel.color = Color.green;
+		else
+			steelCompleteLabel.color = Color.black;
+		
 		waterCompleteLabel.text = manifest.waterCompleted.ToString ();
+		if (manifest.waterCompleted == manifest.waterTarget)
+			waterCompleteLabel.color = Color.green;
+		else
+			waterCompleteLabel.color = Color.black;
 	}
 
 	public void UpdateCurrentDirection(Direction direction)
@@ -111,8 +127,23 @@ public class HUD : MonoBehaviour {
 
 	public void ParkAtDestination(Destination destination)
 	{
+		currentDestination = destination;
 		if(destination.type == DestinationType.Pickup) {
-			pickupButton.SetActive (true);
+			UpdatePickupButton ();
+
+			Manifest manifest = GameController.Instance.CurrentManifest;
+			switch(destination.ParentBlock.PointOfInterest.GoodType) {
+			case Goods.Wood:
+				pickupButton.SetActive (manifest.woodCollected < manifest.woodTarget);
+				break;
+			case Goods.Steel:
+				pickupButton.SetActive (manifest.steelCollected < manifest.steelTarget);
+				break;
+			case Goods.Water:
+				pickupButton.SetActive (manifest.waterCollected < manifest.waterTarget);
+				break;
+			}
+				
 			woodButton.SetActive (false);
 			steelButton.SetActive (false);
 			waterButton.SetActive (false);
@@ -126,6 +157,25 @@ public class HUD : MonoBehaviour {
 			if(PlayerController.Instance.HasGoods(Goods.Water))
 				waterButton.SetActive (true);
 		}
+	}
+
+	public void UpdatePickupButton()
+	{
+		Manifest manifest = GameController.Instance.CurrentManifest;
+		switch(currentDestination.ParentBlock.PointOfInterest.GoodType) {
+		case Goods.Wood:
+			pickupButton.SetActive (manifest.woodCollected < manifest.woodTarget);
+			break;
+		case Goods.Steel:
+			pickupButton.SetActive (manifest.steelCollected < manifest.steelTarget);
+			break;
+		case Goods.Water:
+			pickupButton.SetActive (manifest.waterCollected < manifest.waterTarget);
+			break;
+		}
+
+		if (!PlayerController.Instance.HasFreeSpace ())
+			pickupButton.SetActive (false);
 	}
 
 	public void LeaveDestination()
@@ -144,20 +194,30 @@ public class HUD : MonoBehaviour {
 	public void PickupGoods()
 	{
 		PlayerController.Instance.PickupCurrentGoods ();
+		UpdatePickupButton ();
 	}
 
 	public void DeliverWood()
 	{
 		PlayerController.Instance.DeliverGoods (Goods.Wood);
+		woodButton.SetActive (false);
+		steelButton.SetActive (false);
+		waterButton.SetActive (false);
 	}
 
 	public void DeliverSteel()
 	{
 		PlayerController.Instance.DeliverGoods (Goods.Steel);
+		woodButton.SetActive (false);
+		steelButton.SetActive (false);
+		waterButton.SetActive (false);
 	}
 
 	public void DeliverWater()
 	{
 		PlayerController.Instance.DeliverGoods (Goods.Water);
+		woodButton.SetActive (false);
+		steelButton.SetActive (false);
+		waterButton.SetActive (false);
 	}
 }

@@ -274,7 +274,7 @@ public class PlayerController : MonoBehaviour {
 			return false;
 		}
 
-		if(Destination.goods != good) {
+		if(Destination.ParentBlock.PointOfInterest.GoodType != good) {
 			EndgamePopup.Instance.ShowEndgame (VictoryState.WrongMaterial);
 			return false;
 		}
@@ -293,6 +293,7 @@ public class PlayerController : MonoBehaviour {
 		if (success) {
 			GameController.Instance.CurrentManifest.DeliverGood (good);
 			CityBlockSpawner.Instance.MakeDelivery (Destination.ParentBlock);
+			TargetDestinationBlocks.Remove (Destination.ParentBlock);
 			HUD.Instance.UpdateGoods (currentGoods);
 			Map.Instance.UpdateMap ();
 		}
@@ -311,6 +312,11 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		return false;
+	}
+
+	public bool HasFreeSpace()
+	{
+		return currentGoods [0] == Goods.None || currentGoods [1] == Goods.None || currentGoods [2] == Goods.None;
 	}
 
 	public void DetermineAnimation()
