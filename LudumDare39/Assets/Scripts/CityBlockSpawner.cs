@@ -61,7 +61,10 @@ public class CityBlockSpawner : MonoBehaviour {
 				Destroy (blockArray [i].gameObject);
 			}
 		}
-
+		warehouses = new List<QuadBlock>();
+		dropoffs = new List<QuadBlock>();
+		filler = new List<QuadBlock>();
+		inUseBlocks = new List<QuadBlock>();
 		
 		List<int> pool = IntList;
 
@@ -169,18 +172,23 @@ public class CityBlockSpawner : MonoBehaviour {
 				blockArray [i] = quad;
 			}
 		}
-
+			
 		for (int i = 0; i < 3; i++) {
 			QuadBlock block = quads [Random.Range (0, quads.Count)];
 			quads.Remove (block);
 			warehouses.Add (block);
 			block.SetAsWarehouse (i);
 		}
+		int home = Random.Range (0, 12);
 		for (int i = 0; i < 12; i++) {
 			QuadBlock block = quads [Random.Range (0, quads.Count)];
 			quads.Remove (block);
 			dropoffs.Add (block);
 			block.SetAsDestination (i);
+
+			if(i == home) {
+				PlayerController.Instance.ParkAtDestination (block.PointOfInterest.Destination);
+			}
 		}
 		foreach(QuadBlock block in quads) {
 			filler.Add (block);

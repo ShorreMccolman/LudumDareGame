@@ -45,6 +45,13 @@ public class CityBlock : MonoBehaviour {
 		set{goods = value;}
 	}
 
+	Destination destination;
+	public Destination Destination
+	{
+		get{return destination;}
+		set{destination = value;}
+	}
+
 	GameObject highlight;
 	public GameObject CurrentHighlight
 	{
@@ -78,9 +85,9 @@ public class CityBlock : MonoBehaviour {
 	public void AddDestination(QuadBlock block, Goods good, DestinationType type)
 	{
 		GameObject obj = Instantiate (Resources.Load ("Destination"), transform.position + Vector3.down* 2.5f, Quaternion.identity, transform) as GameObject;
-		Destination dest = obj.GetComponent<Destination> ();
+		Destination = obj.GetComponent<Destination> ();
 		GoodType = good;
-		dest.SetupDestination (block, good, type);
+		Destination.SetupDestination (block, good, type);
 	}
 
 	public void Highlight()

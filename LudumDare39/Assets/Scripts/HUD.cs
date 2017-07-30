@@ -54,8 +54,8 @@ public class HUD : MonoBehaviour {
 	public void UpdateCurrentDirection(Direction direction)
 	{
 		if(direction == Direction.Stopped) {
-			currentDirectionLabel.text = "Press spacebar to start car";
-			currentDirectionLabelBg.text = "Press spacebar to start car";
+			currentDirectionLabel.text = "Press A or D to drive";
+			currentDirectionLabelBg.text = "Press A or D to drive";
 		} else {
 			currentDirectionLabel.text = "Currently driving " + Movement.DirectionLabel (direction);
 			currentDirectionLabelBg.text = "Currently driving " + Movement.DirectionLabel (direction);
@@ -98,9 +98,13 @@ public class HUD : MonoBehaviour {
 			waterButton.SetActive (false);
 		} else if (destination.type == DestinationType.Dropoff) {
 			pickupButton.SetActive (false);
-			woodButton.SetActive (true);
-			steelButton.SetActive (true);
-			waterButton.SetActive (true);
+
+			if(PlayerController.Instance.HasGoods(Goods.Wood))
+				woodButton.SetActive (true);
+			if(PlayerController.Instance.HasGoods(Goods.Steel))
+				steelButton.SetActive (true);
+			if(PlayerController.Instance.HasGoods(Goods.Water))
+				waterButton.SetActive (true);
 		}
 	}
 

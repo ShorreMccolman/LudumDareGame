@@ -198,11 +198,7 @@ public class PlayerController : MonoBehaviour {
 
 		if(Destination != null) {
 			if(TargetDirection == Direction.Up && Vector3.Distance(transform.position,Destination.transform.position) < 0.05f) {
-				TargetDirection = CurrentDirection;
-				CurrentDirection = Direction.Stopped;
-				transform.eulerAngles = Vector3.forward * 90f;
-				transform.position = Destination.parkLocation.position;
-				HUD.Instance.ParkAtDestination (Destination);
+				ParkAtDestination (Destination);
 			}
 		}
 
@@ -211,10 +207,21 @@ public class PlayerController : MonoBehaviour {
 		transform.position += (Vector3)movement.directionVec * currentSpeed * Time.deltaTime;
 	}
 
+	public void ParkAtDestination(Destination destination)
+	{
+		TargetDirection = CurrentDirection;
+		CurrentDirection = Direction.Stopped;
+		transform.eulerAngles = Vector3.forward * 90f;
+		transform.position = destination.parkLocation.position;
+		HUD.Instance.ParkAtDestination (destination);
+	}
+
 	void ResetPlayer()
 	{
 		CurrentDirection = Direction.Stopped;
 		TargetDirection = Direction.Right;
+
+		TargetDestinationBlocks.Clear ();
 
 		currentGoods = new Goods[3];
 		currentGoods [0] = Goods.None;
