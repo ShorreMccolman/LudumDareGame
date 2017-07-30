@@ -218,7 +218,6 @@ public class PlayerController : MonoBehaviour {
 	{
 		if(Destination != null) {
 			PickupGoods (Destination.goods);
-			Debug.LogError ("Picked up " + Destination.goods);
 		}
 	}
 
@@ -240,6 +239,16 @@ public class PlayerController : MonoBehaviour {
 
 	public bool DeliverGoods(Goods good)
 	{
+		if(!TargetDestinationBlocks.Contains(Destination.ParentBlock)) {
+			EndgamePopup.Instance.ShowEndgame (VictoryState.WrongLocation);
+			return false;
+		}
+
+		if(Destination.goods != good) {
+			EndgamePopup.Instance.ShowEndgame (VictoryState.WrongMaterial);
+			return false;
+		}
+
 		bool success = false;
 		if(currentGoods[2] == good) {
 			currentGoods [2] = Goods.None;
