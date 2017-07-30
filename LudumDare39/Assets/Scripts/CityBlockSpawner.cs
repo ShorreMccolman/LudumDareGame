@@ -7,6 +7,8 @@ public class CityBlockSpawner : MonoBehaviour {
 	void Awake()
 	{Instance = this;}
 
+	QuadBlock[] blockArray = new QuadBlock[40];
+
 	List<QuadBlock> warehouses = new List<QuadBlock>();
 	List<QuadBlock> dropoffs = new List<QuadBlock>();
 	List<QuadBlock> filler = new List<QuadBlock>();
@@ -51,11 +53,11 @@ public class CityBlockSpawner : MonoBehaviour {
 		inUseBlocks.Remove (deliveryBlock);
 		dropoffs.Add (deliveryBlock);
 	}
-
+		
 	public void SpawnCityBlocks()
 	{
+		
 		List<int> pool = IntList;
-
 
 		int mall = pool [Random.Range (0, pool.Count)];
 		pool.Remove (mall);
@@ -67,52 +69,67 @@ public class CityBlockSpawner : MonoBehaviour {
 		pool.Remove (park2);
 
 		List<QuadBlock> quads = new List<QuadBlock> ();
-		for(int i=0; i < 5 * 8; i++) {
+		for(int i=0; i < 40; i++) {
 			if (i == mall) {
 				GameObject obj = Instantiate (Resources.Load ("Mall"), transform) as GameObject;
-				obj.transform.position = new Vector3 (i % 5 * 10f, i % 8 * -10f, 0f);
+				obj.transform.position = new Vector3 (i % 5 * 10f, i / 5 * -10f, 0f);
 
 				QuadBlock quad = obj.GetComponent<QuadBlock> ();
 				if (i % 5 == 4) {
 					quad.topRight.illegalDirections.Add (Direction.Right);
 					quad.bottomRight.illegalDirections.Add (Direction.Right);
 				}
-				if (i % 8 == 7) {
+				if (i / 5 == 7) {
 					quad.bottomLeft.illegalDirections.Add (Direction.Down);
 					quad.bottomRight.illegalDirections.Add (Direction.Down);
 				}
 
-				if (i % 5 != 4 && i % 8 != 7) {
+				if (i % 5 != 4 && i / 5 != 7) {
 					quad.bottomRight.isStopSign = true;
 					Instantiate (Resources.Load ("FourWay"), quad.bottomRight.transform.position, Quaternion.identity, obj.transform);
 				}
-
+					
+				if(i % 5 != 0) {
+					blockArray[i-1].topRight.illegalDirections.Add (Direction.Right);
+				}
+				if(i / 5 != 0) {
+					blockArray [i - 5].bottomLeft.illegalDirections.Add (Direction.Down);
+				}
+					
 				quad.SetAsMall ();
+				blockArray [i] = quad;
 			} else if(i == park1 || i == park2) {
 				GameObject obj = Instantiate (Resources.Load ("Park"), transform) as GameObject;
-				obj.transform.position = new Vector3 (i % 5 * 10f, i % 8 * -10f, 0f);
+				obj.transform.position = new Vector3 (i % 5 * 10f, i / 5 * -10f, 0f);
 
 				QuadBlock quad = obj.GetComponent<QuadBlock> ();
 				if (i % 5 == 4) {
 					quad.topRight.illegalDirections.Add (Direction.Right);
 					quad.bottomRight.illegalDirections.Add (Direction.Right);
 				}
-				if (i % 8 == 7) {
+				if (i / 5 == 7) {
 					quad.bottomLeft.illegalDirections.Add (Direction.Down);
 					quad.bottomRight.illegalDirections.Add (Direction.Down);
 				}
 
-				if (i % 5 != 4 && i % 8 != 7) {
+				if (i % 5 != 4 && i / 5 != 7) {
 					quad.bottomRight.isStopSign = true;
 					Instantiate (Resources.Load ("FourWay"), quad.bottomRight.transform.position, Quaternion.identity, obj.transform);
 				}
 
+				if(i % 5 != 0) {
+					blockArray[i-1].topRight.illegalDirections.Add (Direction.Right);
+				}
+				if(i / 8 != 0) {
+					blockArray [i - 5].bottomLeft.illegalDirections.Add (Direction.Down);
+				}
+					
 				quad.SetAsPark ();
+				blockArray [i] = quad;
 			} else {
-
-				//int rand = Random.Range (0, 2);
+				
 				GameObject obj = Instantiate (Resources.Load ("QuadBlock0"), transform) as GameObject;
-				obj.transform.position = new Vector3 (i % 5 * 10f, i % 8 * -10f, 0f);
+				obj.transform.position = new Vector3 (i % 5 * 10f, i / 5 * -10f, 0f);
 
 				QuadBlock quad = obj.GetComponent<QuadBlock> ();
 				quads.Add (quad);
@@ -120,7 +137,7 @@ public class CityBlockSpawner : MonoBehaviour {
 					quad.topRight.illegalDirections.Add (Direction.Right);
 					quad.bottomRight.illegalDirections.Add (Direction.Right);
 				}
-				if (i % 8 == 7) {
+				if (i / 5 == 7) {
 					quad.bottomLeft.illegalDirections.Add (Direction.Down);
 					quad.bottomRight.illegalDirections.Add (Direction.Down);
 				}
@@ -135,14 +152,15 @@ public class CityBlockSpawner : MonoBehaviour {
 					quad.topLeft.isStopSign = true;
 					Instantiate (Resources.Load ("FourWay"), quad.topLeft.transform.position, Quaternion.identity, obj.transform);
 				}
-				if ((stopSeed - 1) % 11 == 0 && i % 8 != 7) {
+				if ((stopSeed - 1) % 11 == 0 && i / 5 != 7) {
 					quad.bottomLeft.isStopSign = true;
 					Instantiate (Resources.Load ("FourWay"), quad.bottomLeft.transform.position, Quaternion.identity, obj.transform);
 				}
-				if ((stopSeed - 1) % 7 == 0 && i % 5 != 4 && i % 8 != 7) {
+				if ((stopSeed - 1) % 7 == 0 && i % 5 != 4 && i / 5 != 7) {
 					quad.bottomRight.isStopSign = true;
 					Instantiate (Resources.Load ("FourWay"), quad.bottomRight.transform.position, Quaternion.identity, obj.transform);
 				}
+				blockArray [i] = quad;
 			}
 		}
 

@@ -89,8 +89,8 @@ public class QuadBlock : MonoBehaviour {
 		for(int i=0;i<4;i++) {
 			if(i == rand) {
 				blocks[i].Renderer.sprite = WarehouseSprite;
-				blocks[i].AddMapPiece (type);
 				blocks[i].AddDestination (this,(Goods)(index % 3),DestinationType.Pickup);
+				blocks[i].AddMapPiece (type);
 				pointOfInterest = blocks [i];
 			} else {
 				blocks [i].AddMapPiece (BlockType.Filler);

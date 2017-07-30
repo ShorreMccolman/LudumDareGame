@@ -10,12 +10,6 @@ public class CityBlock : MonoBehaviour {
 		get{if(mapSprite == null) mapSprite = Resources.Load<Sprite> ("Art/MapBlock"); return mapSprite;}
 	}
 
-	static Sprite warehouseSprite;
-	static Sprite WarehouseSprite
-	{
-		get{if(warehouseSprite == null) warehouseSprite = Resources.Load<Sprite> ("Art/MapWarehouse"); return warehouseSprite;}
-	}
-
 	static Sprite dropoffSprite;
 	static Sprite DropoffSprite
 	{
@@ -67,7 +61,7 @@ public class CityBlock : MonoBehaviour {
 			GoodType = Goods.None;
 			break;
 		case BlockType.Warehouse:
-			obj.GetComponent<SpriteRenderer> ().sprite = WarehouseSprite;
+			obj.GetComponent<SpriteRenderer> ().sprite = Resources.Load<Sprite> ("Art/Map" + GoodType.ToString());
 			break;
 		case BlockType.Dropoff:
 			obj.GetComponent<SpriteRenderer> ().sprite = DropoffSprite;
