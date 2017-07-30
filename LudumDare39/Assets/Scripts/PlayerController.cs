@@ -82,6 +82,16 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
+	Animator animator;
+	public Animator Animator
+	{
+		get{
+			if (animator == null)
+				animator = GetComponent<Animator> ();
+			return animator;
+		}
+	}
+
 	bool stopped;
 	public bool Stopped
 	{
@@ -165,7 +175,6 @@ public class PlayerController : MonoBehaviour {
 			TargetDirection = Direction.Right;
 		}
 
-
 		stopped = false;
 		if(Intersection != null)
 		{
@@ -184,6 +193,8 @@ public class PlayerController : MonoBehaviour {
 				Intersection = null;
 			}
 		}
+
+		DetermineAnimation ();
 
 		if(Destination != null) {
 			if(TargetDirection == Direction.Up && Vector3.Distance(transform.position,Destination.transform.position) < 0.05f) {
@@ -278,5 +289,38 @@ public class PlayerController : MonoBehaviour {
 		}
 
 		return false;
+	}
+
+	public void DetermineAnimation()
+	{
+		if(CurrentDirection == Direction.Right) {
+			if (TargetDirection == Direction.Up)
+				Animator.SetInteger ("state", 1);
+			else if (TargetDirection == Direction.Down)
+				Animator.SetInteger ("state", 2);
+			else
+				Animator.SetInteger ("state", 0);
+		} else if (CurrentDirection == Direction.Down) {
+			if (TargetDirection == Direction.Right)
+				Animator.SetInteger ("state", 1);
+			else if (TargetDirection == Direction.Left)
+				Animator.SetInteger ("state", 2);
+			else
+				Animator.SetInteger ("state", 0);
+		} else if (CurrentDirection == Direction.Left) {
+			if (TargetDirection == Direction.Down)
+				Animator.SetInteger ("state", 1);
+			else if (TargetDirection == Direction.Up)
+				Animator.SetInteger ("state", 2);
+			else
+				Animator.SetInteger ("state", 0);
+		} else if (CurrentDirection == Direction.Up) {
+			if (TargetDirection == Direction.Left)
+				Animator.SetInteger ("state", 1);
+			else if (TargetDirection == Direction.Right)
+				Animator.SetInteger ("state", 2);
+			else
+				Animator.SetInteger ("state", 0);
+		}
 	}
 }

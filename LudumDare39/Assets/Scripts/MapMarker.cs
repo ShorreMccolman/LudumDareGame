@@ -8,7 +8,7 @@ public class MapMarker : MonoBehaviour {
 
 	void LateUpdate () {
 		if(target != null) {
-			transform.position = target.position + Vector3.up;
+			transform.position = target.position + Vector3.up* 2.15f;
 		}
 	}
 }
