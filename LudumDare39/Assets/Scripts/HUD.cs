@@ -29,6 +29,13 @@ public class HUD : MonoBehaviour {
 	public Text currentDirectionLabel;
 	public Text currentDirectionLabelBg;
 
+	public Text woodLabel;
+	public Text woodCompleteLabel;
+	public Text steelLabel;
+	public Text steelCompleteLabel;
+	public Text waterLabel;
+	public Text waterCompleteLabel;
+
 	public Image good1;
 	public Image good2;
 	public Image good3;
@@ -51,6 +58,17 @@ public class HUD : MonoBehaviour {
 		headingObject.SetActive (!Map.Instance.IsOpen);
 	}
 
+	public void UpdateManifest(Manifest manifest)
+	{
+		woodLabel.text = "Wood deliveries: " + manifest.woodTarget;
+		steelLabel.text = "Steel deliveries: " + manifest.steelTarget;
+		waterLabel.text = "Water deliveries: " + manifest.waterTarget;
+
+		woodCompleteLabel.text = manifest.woodCompleted.ToString ();
+		steelCompleteLabel.text = manifest.steelCompleted.ToString ();
+		waterCompleteLabel.text = manifest.waterCompleted.ToString ();
+	}
+
 	public void UpdateCurrentDirection(Direction direction)
 	{
 		if(direction == Direction.Stopped) {
@@ -70,6 +88,8 @@ public class HUD : MonoBehaviour {
 		good2.enabled = good2.sprite != null;
 		good3.sprite = SpriteForGoods (goods [2]);
 		good3.enabled = good3.sprite != null;
+
+		UpdateManifest (GameController.Instance.CurrentManifest);
 	}
 
 	public Sprite SpriteForGoods(Goods good)

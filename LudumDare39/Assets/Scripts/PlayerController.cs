@@ -156,12 +156,14 @@ public class PlayerController : MonoBehaviour {
 	void Update () {
 
 		if(CurrentDirection == Direction.Stopped) {
-			if(Input.GetKeyDown(KeyCode.A)) {
-				TargetDirection = Direction.Left;
-				StartDriving ();
-			} else if (Input.GetKeyDown(KeyCode.D)) {
-				TargetDirection = Direction.Right;
-				StartDriving ();
+			if (!Map.Instance.IsOpen) {
+				if (Input.GetKeyDown (KeyCode.A)) {
+					TargetDirection = Direction.Left;
+					StartDriving ();
+				} else if (Input.GetKeyDown (KeyCode.D)) {
+					TargetDirection = Direction.Right;
+					StartDriving ();
+				}
 			}
 		} else {
 			if(Input.GetKeyDown(KeyCode.A) && CurrentDirection != Direction.Right) {
@@ -182,7 +184,6 @@ public class PlayerController : MonoBehaviour {
 			if (!movingValid || TargetDirection == Direction.Stopped) {
 				if (Intersection.illegalDirections.Contains (CurrentDirection) || TargetDirection == Direction.Stopped) {
 					Stopped = true;
-					//HUD.Instance.mapButton.SetActive (true);
 					return;
 				}
 			}
@@ -201,8 +202,6 @@ public class PlayerController : MonoBehaviour {
 				ParkAtDestination (Destination);
 			}
 		}
-
-		//HUD.Instance.mapButton.SetActive (!IsDriving && !Map.Instance.IsOpen);
 
 		transform.position += (Vector3)movement.directionVec * currentSpeed * Time.deltaTime;
 	}
@@ -260,6 +259,7 @@ public class PlayerController : MonoBehaviour {
 		} else if (currentGoods[2] == Goods.None) {
 			currentGoods [2] = good;
 		}
+		GameController.Instance.CurrentManifest.CollectGood (good);
 		QuadBlock block = CityBlockSpawner.Instance.GetFreeDeliveryBlock ();
 		block.PointOfInterest.GoodType = good;
 		TargetDestinationBlocks.Add (block);
@@ -290,9 +290,12 @@ public class PlayerController : MonoBehaviour {
 			currentGoods [0] = Goods.None;
 			success = true;
 		}
-		CityBlockSpawner.Instance.MakeDelivery (Destination.ParentBlock);
-		HUD.Instance.UpdateGoods (currentGoods);
-		Map.Instance.UpdateMap ();
+		if (success) {
+			GameController.Instance.CurrentManifest.DeliverGood (good);
+			CityBlockSpawner.Instance.MakeDelivery (Destination.ParentBlock);
+			HUD.Instance.UpdateGoods (currentGoods);
+			Map.Instance.UpdateMap ();
+		}
 
 		return success;
 	}
