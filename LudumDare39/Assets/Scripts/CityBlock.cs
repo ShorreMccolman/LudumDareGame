@@ -22,6 +22,18 @@ public class CityBlock : MonoBehaviour {
 		get{if(dropoffSprite == null) dropoffSprite = Resources.Load<Sprite> ("Art/MapBlock"); return dropoffSprite;}
 	}
 
+	static Sprite mallSprite;
+	static Sprite MallSprite
+	{
+		get{if(mallSprite == null) mallSprite = Resources.Load<Sprite> ("Art/MapMall"); return mallSprite;}
+	}
+
+	static Sprite parkSprite;
+	static Sprite ParkSprite
+	{
+		get{if(parkSprite == null) parkSprite = Resources.Load<Sprite> ("Art/MapPark"); return parkSprite;}
+	}
+
 	SpriteRenderer renderer;
 	public SpriteRenderer Renderer{
 		get
@@ -59,6 +71,12 @@ public class CityBlock : MonoBehaviour {
 			break;
 		case BlockType.Dropoff:
 			obj.GetComponent<SpriteRenderer> ().sprite = DropoffSprite;
+			break;
+		case BlockType.Mall:
+			obj.GetComponent<SpriteRenderer> ().sprite = MallSprite;
+			break;
+		case BlockType.Park:
+			obj.GetComponent<SpriteRenderer> ().sprite = ParkSprite;
 			break;
 		}
 	}

@@ -6,7 +6,9 @@ public enum BlockType
 {
 	Filler,
 	Warehouse,
-	Dropoff
+	Dropoff,
+	Mall,
+	Park
 }
 
 public class QuadBlock : MonoBehaviour {
@@ -29,6 +31,7 @@ public class QuadBlock : MonoBehaviour {
 	public Intersection bottomLeft;
 	public Intersection bottomRight;
 
+	public CityBlock specialBlock;
 	public CityBlock topLeftBlock;
 	public CityBlock topRightBlock;
 	public CityBlock bottomLeftBlock;
@@ -54,6 +57,18 @@ public class QuadBlock : MonoBehaviour {
 			blocks.Add (bottomRightBlock);
 			return blocks;
 		}
+	}
+
+	public void SetAsMall()
+	{
+		type = BlockType.Filler;
+		specialBlock.AddMapPiece (BlockType.Mall);
+	}
+
+	public void SetAsPark()
+	{
+		type = BlockType.Park;
+		specialBlock.AddMapPiece (BlockType.Park);
 	}
 
 	public void SetAsFiller()
