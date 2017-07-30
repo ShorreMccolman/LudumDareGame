@@ -205,7 +205,7 @@ public class PlayerController : MonoBehaviour {
 
 		transform.position += (Vector3)movement.directionVec * currentSpeed * Time.deltaTime;
 	}
-
+		
 	public void ParkAtDestination(Destination destination)
 	{
 		TargetDirection = CurrentDirection;
@@ -228,6 +228,12 @@ public class PlayerController : MonoBehaviour {
 		currentGoods [2] = Goods.None;
 		HUD.Instance.UpdateGoods (currentGoods);
 	}
+
+	public void StopCar()
+	{
+		CurrentDirection = Direction.Stopped;
+		TargetDirection = Direction.Stopped;
+	}
 		
 	void StartDriving()
 	{
@@ -235,6 +241,8 @@ public class PlayerController : MonoBehaviour {
 			TargetDirection = Direction.Right;
 
 		CurrentDirection = TargetDirection;
+
+		SoundController.Instance.PlaySoundRepeating (Sounds.Engine);
 
 		if(Destination != null) {
 			transform.position = Destination.transform.position;

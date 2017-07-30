@@ -52,5 +52,6 @@ public class MainMenu : MonoBehaviour {
 	public void StartGame()
 	{
 		CloseMenu ();
+		SoundController.Instance.PlaySoundEffect (Sounds.Click);
 	}
 }

@@ -188,17 +188,20 @@ public class HUD : MonoBehaviour {
 
 	public void OpenMap()
 	{
+		SoundController.Instance.PlaySoundEffect (Sounds.Click);
 		Map.Instance.OpenMap ();
 	}
 
 	public void PickupGoods()
 	{
+		SoundController.Instance.PlaySoundEffect (Sounds.Pickup);
 		PlayerController.Instance.PickupCurrentGoods ();
 		UpdatePickupButton ();
 	}
 
 	public void DeliverWood()
 	{
+		SoundController.Instance.PlaySoundEffect (Sounds.Deliver);
 		PlayerController.Instance.DeliverGoods (Goods.Wood);
 		woodButton.SetActive (false);
 		steelButton.SetActive (false);
@@ -207,6 +210,7 @@ public class HUD : MonoBehaviour {
 
 	public void DeliverSteel()
 	{
+		SoundController.Instance.PlaySoundEffect (Sounds.Deliver);
 		PlayerController.Instance.DeliverGoods (Goods.Steel);
 		woodButton.SetActive (false);
 		steelButton.SetActive (false);
@@ -215,6 +219,7 @@ public class HUD : MonoBehaviour {
 
 	public void DeliverWater()
 	{
+		SoundController.Instance.PlaySoundEffect (Sounds.Deliver);
 		PlayerController.Instance.DeliverGoods (Goods.Water);
 		woodButton.SetActive (false);
 		steelButton.SetActive (false);

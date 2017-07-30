@@ -30,6 +30,13 @@ public class EndgamePopup : MonoBehaviour {
 	{
 		contents.SetActive (true);
 
+		PlayerController.Instance.StopCar ();
+
+		if(state == VictoryState.Victory)
+			SoundController.Instance.PlaySoundEffect (Sounds.Win);
+		else
+			SoundController.Instance.PlaySoundEffect (Sounds.Lose);
+
 		switch(state)
 		{
 		case VictoryState.Victory:

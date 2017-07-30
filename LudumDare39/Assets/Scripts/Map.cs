@@ -68,6 +68,7 @@ public class Map : MonoBehaviour {
 	public void CloseMap()
 	{
 		IsOpen = false;
+		SoundController.Instance.PlaySoundEffect (Sounds.Click);
 	}
 
 	public void UpdateMap()
