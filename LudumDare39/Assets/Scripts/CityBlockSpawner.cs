@@ -27,7 +27,7 @@ public class CityBlockSpawner : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		SpawnCityBlocks ();
+		GameController.Instance.NewGame += SpawnCityBlocks;
 	}
 
 	public QuadBlock GetFreeDeliveryBlock()
@@ -56,6 +56,12 @@ public class CityBlockSpawner : MonoBehaviour {
 		
 	public void SpawnCityBlocks()
 	{
+		for(int i=0;i<40;i++) {
+			if(blockArray[i] != null) {
+				Destroy (blockArray [i].gameObject);
+			}
+		}
+
 		
 		List<int> pool = IntList;
 

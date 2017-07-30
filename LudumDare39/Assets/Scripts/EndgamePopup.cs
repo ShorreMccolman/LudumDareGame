@@ -55,5 +55,6 @@ public class EndgamePopup : MonoBehaviour {
 	public void RestartGame()
 	{
 		contents.SetActive (false);
+		GameController.Instance.ResetGame ();
 	}
 }

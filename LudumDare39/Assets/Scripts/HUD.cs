@@ -33,6 +33,7 @@ public class HUD : MonoBehaviour {
 	public Image good2;
 	public Image good3;
 
+	public GameObject headingObject;
 	public GameObject mapButton;
 	public GameObject pickupButton;
 	public GameObject woodButton;
@@ -41,14 +42,20 @@ public class HUD : MonoBehaviour {
 
 	void Start()
 	{
-		LeaveDestination ();
+		GameController.Instance.NewGame += LeaveDestination;
+	}
+
+	void Update()
+	{
+		mapButton.SetActive (!PlayerController.Instance.IsDriving && !Map.Instance.IsOpen);
+		headingObject.SetActive (!Map.Instance.IsOpen);
 	}
 
 	public void UpdateCurrentDirection(Direction direction)
 	{
 		if(direction == Direction.Stopped) {
-			currentDirectionLabel.text = "Spacebar to start";
-			currentDirectionLabelBg.text = "Spacebar to start";
+			currentDirectionLabel.text = "Press spacebar to start car";
+			currentDirectionLabelBg.text = "Press spacebar to start car";
 		} else {
 			currentDirectionLabel.text = "Currently driving " + Movement.DirectionLabel (direction);
 			currentDirectionLabelBg.text = "Currently driving " + Movement.DirectionLabel (direction);

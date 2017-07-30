@@ -22,7 +22,7 @@ public class Map : MonoBehaviour {
 
 	void Start()
 	{
-		NewGame ();
+		GameController.Instance.NewGame += NewGame;
 	}
 
 	void Update()

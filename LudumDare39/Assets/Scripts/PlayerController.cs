@@ -150,29 +150,29 @@ public class PlayerController : MonoBehaviour {
 
 
 	void Start () {
-		CurrentDirection = Direction.Stopped;
-		TargetDirection = Direction.Right;
-
-		currentGoods = new Goods[3];
-		currentGoods [0] = Goods.None;
-		currentGoods [1] = Goods.None;
-		currentGoods [2] = Goods.None;
-		HUD.Instance.UpdateGoods (currentGoods);
+		GameController.Instance.NewGame += ResetPlayer;
 	}
 
 	void Update () {
 
-		if(CurrentDirection == Direction.Stopped && Input.GetKeyDown(KeyCode.Space)) {
-			StartDriving ();
-		}
-		if(Input.GetKeyDown(KeyCode.A) && CurrentDirection != Direction.Right) {
-			TargetDirection = Direction.Left;
-		} else if(Input.GetKeyDown(KeyCode.W) && CurrentDirection != Direction.Down) {
-			TargetDirection = Direction.Up;
-		} else if(Input.GetKeyDown(KeyCode.S) && CurrentDirection != Direction.Up) {
-			TargetDirection = Direction.Down;
-		} else if(Input.GetKeyDown(KeyCode.D) && CurrentDirection != Direction.Left) {
-			TargetDirection = Direction.Right;
+		if(CurrentDirection == Direction.Stopped) {
+			if(Input.GetKeyDown(KeyCode.A)) {
+				TargetDirection = Direction.Left;
+				StartDriving ();
+			} else if (Input.GetKeyDown(KeyCode.D)) {
+				TargetDirection = Direction.Right;
+				StartDriving ();
+			}
+		} else {
+			if(Input.GetKeyDown(KeyCode.A) && CurrentDirection != Direction.Right) {
+				TargetDirection = Direction.Left;
+			} else if(Input.GetKeyDown(KeyCode.W) && CurrentDirection != Direction.Down) {
+				TargetDirection = Direction.Up;
+			} else if(Input.GetKeyDown(KeyCode.S) && CurrentDirection != Direction.Up) {
+				TargetDirection = Direction.Down;
+			} else if(Input.GetKeyDown(KeyCode.D) && CurrentDirection != Direction.Left) {
+				TargetDirection = Direction.Right;
+			}
 		}
 
 		stopped = false;
@@ -182,7 +182,7 @@ public class PlayerController : MonoBehaviour {
 			if (!movingValid || TargetDirection == Direction.Stopped) {
 				if (Intersection.illegalDirections.Contains (CurrentDirection) || TargetDirection == Direction.Stopped) {
 					Stopped = true;
-					HUD.Instance.mapButton.SetActive (true);
+					//HUD.Instance.mapButton.SetActive (true);
 					return;
 				}
 			}
@@ -206,9 +206,21 @@ public class PlayerController : MonoBehaviour {
 			}
 		}
 
-		HUD.Instance.mapButton.SetActive (!IsDriving);
+		//HUD.Instance.mapButton.SetActive (!IsDriving && !Map.Instance.IsOpen);
 
 		transform.position += (Vector3)movement.directionVec * currentSpeed * Time.deltaTime;
+	}
+
+	void ResetPlayer()
+	{
+		CurrentDirection = Direction.Stopped;
+		TargetDirection = Direction.Right;
+
+		currentGoods = new Goods[3];
+		currentGoods [0] = Goods.None;
+		currentGoods [1] = Goods.None;
+		currentGoods [2] = Goods.None;
+		HUD.Instance.UpdateGoods (currentGoods);
 	}
 		
 	void StartDriving()
