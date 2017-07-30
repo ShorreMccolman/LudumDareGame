@@ -3,14 +3,43 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class CityBlockSpawner : MonoBehaviour {
+	public static CityBlockSpawner Instance;
+	void Awake()
+	{Instance = this;}
 
 	List<QuadBlock> warehouses = new List<QuadBlock>();
 	List<QuadBlock> dropoffs = new List<QuadBlock>();
 	List<QuadBlock> filler = new List<QuadBlock>();
 
+	List<QuadBlock> inUseBlocks = new List<QuadBlock>();
+
 	// Use this for initialization
 	void Start () {
 		SpawnCityBlocks ();
+	}
+
+	public QuadBlock GetFreeDeliveryBlock()
+	{
+		if(dropoffs.Count == 0) {
+			Debug.LogError ("No free delivery blocks");
+			return null;
+		}
+
+		QuadBlock block = dropoffs[0];
+		dropoffs.Remove (block);
+		inUseBlocks.Add (block);
+		return block;
+	}
+
+	public void MakeDelivery(QuadBlock deliveryBlock)
+	{
+		if(!inUseBlocks.Contains(deliveryBlock)) {
+			Debug.LogError ("Delivered to block that was not in use");
+			return;
+		}
+		deliveryBlock.PointOfInterest.RemoveHighlight ();
+		inUseBlocks.Remove (deliveryBlock);
+		dropoffs.Add (deliveryBlock);
 	}
 
 	public void SpawnCityBlocks()

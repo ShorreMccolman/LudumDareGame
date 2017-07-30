@@ -24,10 +24,19 @@ public class Map : MonoBehaviour {
 	public void OpenMap()
 	{
 		IsOpen = true;
+		UpdateMap ();
 	}
 
 	public void CloseMap()
 	{
 		IsOpen = false;
+	}
+
+	public void UpdateMap()
+	{
+		List<QuadBlock> blocks = PlayerController.Instance.TargetDestinationBlocks;
+		foreach(QuadBlock block in blocks) {
+			block.PointOfInterest.Highlight ();
+		}
 	}
 }

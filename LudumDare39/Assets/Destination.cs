@@ -22,10 +22,18 @@ public class Destination : MonoBehaviour {
 	public Goods goods;
 	public DestinationType type;
 
+	QuadBlock parentBlock;
+	public QuadBlock ParentBlock
+	{
+		set{parentBlock = value;}
+		get{return parentBlock;}
+	}
+
 	public Transform parkLocation;
 
-	public void SetupDestination(Goods theGood, DestinationType theType)
+	public void SetupDestination(QuadBlock parent, Goods theGood, DestinationType theType)
 	{
+		ParentBlock = parent;
 		goods = theGood;
 		type = theType;
 	}

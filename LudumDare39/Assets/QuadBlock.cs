@@ -34,6 +34,16 @@ public class QuadBlock : MonoBehaviour {
 	public CityBlock bottomLeftBlock;
 	public CityBlock bottomRightBlock;
 
+	CityBlock pointOfInterest;
+	public CityBlock PointOfInterest
+	{
+		get{
+			if (pointOfInterest == null)
+				Debug.LogError ("Attempted to get point of interest where there was none...");
+			
+			return pointOfInterest;}
+	}
+
 	public List<CityBlock> CityBlocks
 	{
 		get{
@@ -65,7 +75,8 @@ public class QuadBlock : MonoBehaviour {
 			if(i == rand) {
 				blocks[i].Renderer.sprite = WarehouseSprite;
 				blocks[i].AddMapPiece (type);
-				blocks[i].AddDestination ((Goods)(index % 3),DestinationType.Pickup);
+				blocks[i].AddDestination (this,(Goods)(index % 3),DestinationType.Pickup);
+				pointOfInterest = blocks [i];
 			} else {
 				blocks [i].AddMapPiece (BlockType.Filler);
 			}
@@ -82,7 +93,8 @@ public class QuadBlock : MonoBehaviour {
 			if(i == rand) {
 				blocks[i].Renderer.sprite = DropoffSprite;
 				blocks[i].AddMapPiece (type);
-				blocks[i].AddDestination ((Goods)(index % 3),DestinationType.Dropoff);
+				blocks[i].AddDestination (this,(Goods)(index % 3),DestinationType.Dropoff);
+				pointOfInterest = blocks [i];
 			} else {
 				blocks [i].AddMapPiece (BlockType.Filler);
 			}

@@ -19,7 +19,7 @@ public class CityBlock : MonoBehaviour {
 	static Sprite dropoffSprite;
 	static Sprite DropoffSprite
 	{
-		get{if(dropoffSprite == null) dropoffSprite = Resources.Load<Sprite> ("Art/MapDestination"); return dropoffSprite;}
+		get{if(dropoffSprite == null) dropoffSprite = Resources.Load<Sprite> ("Art/MapBlock"); return dropoffSprite;}
 	}
 
 	SpriteRenderer renderer;
@@ -32,12 +32,27 @@ public class CityBlock : MonoBehaviour {
 		}
 	}
 
+	Goods goods;
+	public Goods GoodType
+	{
+		get{return goods;}
+		set{goods = value;}
+	}
+
+	GameObject highlight;
+	public GameObject CurrentHighlight
+	{
+		get{return highlight;}
+		set{highlight = value;}
+	}
+
 	public void AddMapPiece(BlockType type)
 	{
 		GameObject obj = Instantiate (Resources.Load ("MapBlock"), transform.position, Quaternion.identity, transform) as GameObject;
 		switch(type) {
 		case BlockType.Filler:
 			obj.GetComponent<SpriteRenderer> ().sprite = MapSprite;
+			GoodType = Goods.None;
 			break;
 		case BlockType.Warehouse:
 			obj.GetComponent<SpriteRenderer> ().sprite = WarehouseSprite;
@@ -48,10 +63,25 @@ public class CityBlock : MonoBehaviour {
 		}
 	}
 
-	public void AddDestination(Goods good, DestinationType type)
+	public void AddDestination(QuadBlock block, Goods good, DestinationType type)
 	{
 		GameObject obj = Instantiate (Resources.Load ("Destination"), transform.position + Vector3.down* 2.5f, Quaternion.identity, transform) as GameObject;
 		Destination dest = obj.GetComponent<Destination> ();
-		dest.SetupDestination (good, type);
+		GoodType = good;
+		dest.SetupDestination (block, good, type);
+	}
+
+	public void Highlight()
+	{
+		if (CurrentHighlight == null) {
+			CurrentHighlight = Instantiate (Resources.Load ("Highlight" + GoodType.ToString()), transform.position, Quaternion.identity, transform) as GameObject;
+		}
+	}
+
+	public void RemoveHighlight()
+	{
+		if (CurrentHighlight != null)
+			Destroy (CurrentHighlight.gameObject);
+		CurrentHighlight = null;
 	}
 }

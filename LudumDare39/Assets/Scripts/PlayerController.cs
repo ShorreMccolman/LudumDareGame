@@ -72,6 +72,16 @@ public class PlayerController : MonoBehaviour {
 		}
 	}
 
+	List<QuadBlock> targetDestinations;
+	public List<QuadBlock> TargetDestinationBlocks
+	{
+		get{
+			if (targetDestinations == null)
+				targetDestinations = new List<QuadBlock> ();
+			return targetDestinations;
+		}
+	}
+
 	bool stopped;
 	public bool Stopped
 	{
@@ -208,6 +218,7 @@ public class PlayerController : MonoBehaviour {
 	{
 		if(Destination != null) {
 			PickupGoods (Destination.goods);
+			Debug.LogError ("Picked up " + Destination.goods);
 		}
 	}
 
@@ -220,26 +231,31 @@ public class PlayerController : MonoBehaviour {
 		} else if (currentGoods[2] == Goods.None) {
 			currentGoods [2] = good;
 		}
+		QuadBlock block = CityBlockSpawner.Instance.GetFreeDeliveryBlock ();
+		block.PointOfInterest.GoodType = good;
+		TargetDestinationBlocks.Add (block);
 		HUD.Instance.UpdateGoods (currentGoods);
+		Map.Instance.UpdateMap ();
 	}
 
 	public bool DeliverGoods(Goods good)
 	{
+		bool success = false;
 		if(currentGoods[2] == good) {
 			currentGoods [2] = Goods.None;
-			HUD.Instance.UpdateGoods (currentGoods);
-			return true;
+			success = true;
 		} else if (currentGoods[1] == good) {
 			currentGoods [1] = Goods.None;
-			HUD.Instance.UpdateGoods (currentGoods);
-			return true;
+			success = true;
 		} else if (currentGoods[0] == good) {
 			currentGoods [0] = Goods.None;
-			HUD.Instance.UpdateGoods (currentGoods);
-			return true;
+			success = true;
 		}
+		CityBlockSpawner.Instance.MakeDelivery (Destination.ParentBlock);
+		HUD.Instance.UpdateGoods (currentGoods);
+		Map.Instance.UpdateMap ();
 
-		return false;
+		return success;
 	}
 
 	public bool HasGoods(Goods good)
