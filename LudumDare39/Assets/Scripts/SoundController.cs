@@ -9,7 +9,7 @@ public class SoundClip
 	[Range(0f,1f)]
 	public float volume;
 
-	AudioClip clip;
+	public AudioClip clip;
 	public AudioClip Clip
 	{
 		get {

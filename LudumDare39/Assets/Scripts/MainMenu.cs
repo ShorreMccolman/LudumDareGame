@@ -49,8 +49,23 @@ public class MainMenu : MonoBehaviour {
 		cover.enabled = false;
 	}
 
-	public void StartGame()
+	public void StartEasy()
 	{
+		GameController.Instance.ResetGame (Difficulty.Easy);
+		CloseMenu ();
+		SoundController.Instance.PlaySoundEffect (Sounds.Click);
+	}
+
+	public void StartHard()
+	{
+		GameController.Instance.ResetGame (Difficulty.Hard);
+		CloseMenu ();
+		SoundController.Instance.PlaySoundEffect (Sounds.Click);
+	}
+
+	public void StartNormal()
+	{
+		GameController.Instance.ResetGame ();
 		CloseMenu ();
 		SoundController.Instance.PlaySoundEffect (Sounds.Click);
 	}

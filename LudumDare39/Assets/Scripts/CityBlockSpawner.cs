@@ -153,22 +153,31 @@ public class CityBlockSpawner : MonoBehaviour {
 
 				int stopSeed = Random.Range (0, 1000);
 
+				bool sign = false;
 				if (stopSeed % 7 == 0 && i % 5 != 4) {
+					sign = true;
 					quad.topRight.isStopSign = true;
 					Instantiate (Resources.Load ("FourWay"), quad.topRight.transform.position, Quaternion.identity, obj.transform);
 				}
 				if (stopSeed % 11 == 0) {
+					sign = true;
 					quad.topLeft.isStopSign = true;
 					Instantiate (Resources.Load ("FourWay"), quad.topLeft.transform.position, Quaternion.identity, obj.transform);
 				}
 				if ((stopSeed - 1) % 11 == 0 && i / 5 != 7) {
+					sign = true;
 					quad.bottomLeft.isStopSign = true;
 					Instantiate (Resources.Load ("FourWay"), quad.bottomLeft.transform.position, Quaternion.identity, obj.transform);
 				}
 				if ((stopSeed - 1) % 7 == 0 && i % 5 != 4 && i / 5 != 7) {
+					sign = true;
 					quad.bottomRight.isStopSign = true;
 					Instantiate (Resources.Load ("FourWay"), quad.bottomRight.transform.position, Quaternion.identity, obj.transform);
 				}
+				if (!sign) {
+					quad.SpawnConstruction (Random.Range (0f, 100f) < 15f, Random.Range (0f, 100f) < 15f);
+				}
+				
 				blockArray [i] = quad;
 			}
 		}

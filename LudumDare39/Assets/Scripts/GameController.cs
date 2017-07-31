@@ -48,9 +48,9 @@ public class Manifest
 			waterTarget = 3;
 			break;
 		case Difficulty.Hard:
-			woodTarget = Random.Range (3, 6);
-			steelTarget = Random.Range (woodTarget, 9) - woodTarget;
-			waterTarget = 14 - woodTarget + steelTarget;
+			woodTarget = 4;
+			steelTarget = 4;
+			waterTarget = 4;
 			break;
 
 		default:
@@ -115,13 +115,15 @@ public class GameController : MonoBehaviour {
 		StartCoroutine (IntroSequence ());
 	}
 
-	public void ResetGame()
+	public void ResetGame(Difficulty difficulty = Difficulty.Medium)
 	{
-		CurrentManifest = new Manifest (Difficulty.Medium);
+		CurrentManifest = new Manifest (difficulty);
 		HUD.Instance.UpdateManifest (CurrentManifest);
 
 		if(NewGame != null)
 			NewGame ();
+
+		Map.Instance.InitWithDifficulty (difficulty);
 	}
 
 	IEnumerator IntroSequence()

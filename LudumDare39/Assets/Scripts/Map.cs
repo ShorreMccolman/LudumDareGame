@@ -11,6 +11,9 @@ public class Map : MonoBehaviour {
 	public GameObject contents;
 	public GameObject camera;
 
+	public GameObject popup;
+	public Text popupText;
+
 	public Text batteryLabel;
 
 	float currentPower;
@@ -27,7 +30,7 @@ public class Map : MonoBehaviour {
 
 	void Update()
 	{
-		if(IsOpen) {
+		if(IsOpen && !popup.activeSelf) {
 			currentPower -= Time.deltaTime;
 			batteryLabel.text = (currentPower).ToString ("F0") + "%";
 			if(currentPower <= 0f) {
@@ -38,14 +41,41 @@ public class Map : MonoBehaviour {
 			} else if (currentPower <= 25f) {
 				batteryLabel.color = Color.yellow;
 			}
+
+			if(currentPower < 20f && !shown20) {
+				popup.SetActive (true);
+				popupText.text = "20% of battery remaining";
+			} else if(currentPower < 10f && !shown10) {
+				popup.SetActive (true);
+				popupText.text = "10% of battery remaining";
+			}
 		}
 	}
 
+	public void InitWithDifficulty(Difficulty difficulty) {
+		switch(difficulty) {
+		case Difficulty.Easy:
+			currentPower = 50.0f;
+			batteryLabel.text = "100%";
+			break;
+		case Difficulty.Medium:
+			currentPower = 40.0f;
+			batteryLabel.text = "100%";
+			break;
+		case Difficulty.Hard:
+			currentPower = 30.0f;
+			batteryLabel.text = "100%";
+			break;
+		}
+	}
+
+	bool shown20, shown10;
 	public void NewGame()
 	{
-		currentPower = 33.0f;
-		batteryLabel.text = "100%";
 		batteryLabel.color = Color.black;
+
+		shown10 = false;
+		shown20 = false;
 	}
 
 	bool isOpen;
@@ -77,5 +107,10 @@ public class Map : MonoBehaviour {
 		foreach(QuadBlock block in blocks) {
 			block.PointOfInterest.Highlight ();
 		}
+	}
+
+	public void ClosePopup()
+	{
+		popup.SetActive (false);
 	}
 }

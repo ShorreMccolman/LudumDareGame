@@ -37,6 +37,9 @@ public class QuadBlock : MonoBehaviour {
 	public CityBlock bottomLeftBlock;
 	public CityBlock bottomRightBlock;
 
+	public Transform constructionAnchorBottom;
+	public Transform constructionAnchorTop;
+
 	CityBlock pointOfInterest;
 	public CityBlock PointOfInterest
 	{
@@ -56,6 +59,20 @@ public class QuadBlock : MonoBehaviour {
 			blocks.Add (bottomLeftBlock);
 			blocks.Add (bottomRightBlock);
 			return blocks;
+		}
+	}
+
+	public void SpawnConstruction(bool top, bool bottom)
+	{
+		if(bottom) {
+			Instantiate (Resources.Load ("Construction"), constructionAnchorBottom.position, Quaternion.identity, transform);
+			topRight.illegalDirections.Add (Direction.Down);
+			bottomRight.illegalDirections.Add (Direction.Up);
+		}
+		if(top) {
+			Instantiate (Resources.Load ("Construction"), constructionAnchorBottom.position, Quaternion.identity, transform);
+			topLeft.illegalDirections.Add (Direction.Down);
+			bottomLeft.illegalDirections.Add (Direction.Up);
 		}
 	}
 
