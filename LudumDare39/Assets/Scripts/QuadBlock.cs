@@ -70,7 +70,7 @@ public class QuadBlock : MonoBehaviour {
 			bottomRight.illegalDirections.Add (Direction.Up);
 		}
 		if(top) {
-			Instantiate (Resources.Load ("Construction"), constructionAnchorBottom.position, Quaternion.identity, transform);
+			Instantiate (Resources.Load ("Construction"), constructionAnchorTop.position, Quaternion.identity, transform);
 			topLeft.illegalDirections.Add (Direction.Down);
 			bottomLeft.illegalDirections.Add (Direction.Up);
 		}

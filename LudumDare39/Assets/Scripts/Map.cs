@@ -44,8 +44,10 @@ public class Map : MonoBehaviour {
 
 			if(currentPower < 20f && !shown20) {
 				popup.SetActive (true);
+				shown20 = true;
 				popupText.text = "20% of battery remaining";
 			} else if(currentPower < 10f && !shown10) {
+				shown10 = true;
 				popup.SetActive (true);
 				popupText.text = "10% of battery remaining";
 			}

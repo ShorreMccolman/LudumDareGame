@@ -64,4 +64,22 @@ public class EndgamePopup : MonoBehaviour {
 		contents.SetActive (false);
 		GameController.Instance.ResetGame ();
 	}
+
+	public void RestartEasy()
+	{
+		contents.SetActive (false);
+		GameController.Instance.ResetGame (Difficulty.Easy);
+	}
+
+	public void RestartNormal()
+	{
+		contents.SetActive (false);
+		GameController.Instance.ResetGame (Difficulty.Medium);
+	}
+
+	public void RestartHard()
+	{
+		contents.SetActive (false);
+		GameController.Instance.ResetGame (Difficulty.Hard);
+	}
 }
